@@ -645,6 +645,25 @@ module.exports = {
 				);
 			}
 
+			if (route.tenancy) {
+				const tenant = await route.tenancy.call(
+					this,
+					ctx,
+					route,
+					req,
+					res,
+					alias
+				);
+
+				if (tenant) {
+					this.logger.debug("Tenant Existed", tenant);
+					ctx.meta.tenant = tenant;
+				} else {
+					this.logger.debug("Tenant Not Found");
+					ctx.meta.tenant = null;
+				}
+			}
+
 			// Authentication
 			if (route.authentication) {
 				const user = await route.authentication.call(

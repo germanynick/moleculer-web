@@ -1,5 +1,5 @@
 {
-  "name": "moleculer-web",
+  "name": "n2o-moleculer-web",
   "version": "0.10.4",
   "description": "Official API Gateway service for Moleculer framework",
   "main": "index.js",

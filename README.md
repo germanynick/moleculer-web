@@ -33,7 +33,7 @@ The `moleculer-web` is the official API gateway service for [Moleculer](https://
 
 ## Install
 ```
-npm install moleculer-web --save
+npm install tenancy-moleculer-web --save
 ```
 
 ## Usage
@@ -44,7 +44,7 @@ You can access to all services (including internal `$node.`) via `http://localho
 
 ```js
 let { ServiceBroker } = require("moleculer");
-let ApiService = require("moleculer-web");
+let ApiService = require("tenancy-moleculer-web");
 
 let broker = new ServiceBroker({ logger: console });
 
@@ -73,6 +73,57 @@ broker.start();
 
 ## Documentation
 Please read our [documentation on Moleculer site](http://moleculer.services/docs/moleculer-web.html)
+
+### Support Multiple Tenancy
+```js
+let { ServiceBroker } = require("moleculer");
+let ApiMixin = require("tenancy-moleculer-web");
+
+let broker = new ServiceBroker({ logger: console });
+
+broker.createService({
+    name: "test",
+    mixins: [ApiMixin]
+    settings: {
+        port: Number(process.env.PORT || 3000),
+		routes: [
+            {
+                {
+				path: "/api",
+				authentication: false,
+				tenancy: true, // Check Tenant existed or not?
+				whitelist: ["user.*"],
+				aliases: {
+					"GET /users": "user.list",
+				},
+			},
+            }
+        ]
+    },
+    actions: {
+        hello() {
+            return "Hello API Gateway!"
+        }
+    },
+    methods: {
+        tenancy(ctx, route, req) {
+            const tenantId = req.headers["x-tenant"]
+
+            if (!tenant) {
+                throw new Errors.MoleculerClientError(
+                    ERRORS.Unauthorization.message,
+                    ERRORS.Unauthorization.code
+                );
+            }
+
+            const tenant = { id: tenantId, name: 'Sample Tenant' }
+            // Return info will be mapped into ctx.meta.tenant
+            return tenant 
+        }
+    }
+});
+
+```
 
 ## Test
 ```

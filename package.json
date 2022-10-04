@@ -1,5 +1,5 @@
 {
-  "name": "n2o-moleculer-web",
+  "name": "tenacy-moleculer-web",
   "version": "0.10.5",
   "description": "Official API Gateway service for Moleculer framework",
   "main": "index.js",

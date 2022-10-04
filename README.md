@@ -109,7 +109,7 @@ broker.createService({
         tenancy(ctx, route, req) {
             const tenantId = req.headers["x-tenant"]
 
-            if (!tenant) {
+            if (!tenantId) {
                 throw new Errors.MoleculerClientError(
                     ERRORS.Unauthorization.message,
                     ERRORS.Unauthorization.code
